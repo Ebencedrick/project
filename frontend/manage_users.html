@@ -56,6 +56,8 @@
         <li><a href="admin_dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
         <li><a href="manage_users.html" class="active"><i class="fas fa-users"></i> Manage Users</a></li>
         <li><a href="manage_properties.html"><i class="fas fa-home"></i> Manage Properties</a></li>
+        <li><a href="#" id="messagesTab"><i class="fas fa-comments"></i> Messages</a></li>
+        <li><a href="#" id="settingsTab"><i class="fas fa-cog"></i> Settings</a></li>
       </ul>
     </nav>
     <main class="admin-main">
@@ -252,6 +254,12 @@
       }
       if(link.getAttribute('href') === 'admin_dashboard.html') {
         link.addEventListener('click', e => { e.preventDefault(); window.location.href = 'admin_dashboard.html'; });
+      }
+      if(link.id === 'messagesTab') {
+        link.addEventListener('click', e => { e.preventDefault(); window.location.href = 'manage_properties.html#messages'; });
+      }
+      if(link.id === 'settingsTab') {
+        link.addEventListener('click', e => { e.preventDefault(); window.location.href = 'manage_properties.html#settings'; });
       }
     });
     // Logout button logic
