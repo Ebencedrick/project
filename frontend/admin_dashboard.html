@@ -12,10 +12,24 @@
     <div class="container">
       <div class="logo">RealEstate</div>
       <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="property_list.html">Properties</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="login.html">Logout</a></li>
+        <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="property_list.html" class="nav-link"><i class="fas fa-building"></i> Properties</a></li>
+        <li><a href="#contact" class="nav-link"><i class="fas fa-envelope"></i> Contact</a></li>
+        <li><a href="login.html" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const navLinks = document.querySelectorAll('.nav-link');
+      const current = window.location.pathname.split('/').pop();
+      navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if ((href === current) || (href === '#' && window.location.hash)) {
+          link.classList.add('active');
+        } else if (href !== '#' && current === '' && href === 'index.html') {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
       </ul>
       <div class="menu-toggle"><i class="fas fa-bars"></i></div>
     </div>

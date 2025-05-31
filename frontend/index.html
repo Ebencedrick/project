@@ -14,10 +14,25 @@
     <div class="container">
       <div class="logo">RealEstate</div>
       <ul class="nav-links">
-        <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="property_list.html">Properties</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="login.html">Login/Register</a></li>
+        <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="property_list.html" class="nav-link"><i class="fas fa-building"></i> Properties</a></li>
+        <li><a href="#contact" class="nav-link"><i class="fas fa-envelope"></i> Contact</a></li>
+        <li><a href="login.html" class="nav-link"><i class="fas fa-user"></i> Login/Register</a></li>
+  <script>
+    // Highlight active nav link based on current page
+    document.addEventListener('DOMContentLoaded', function() {
+      const navLinks = document.querySelectorAll('.nav-link');
+      const current = window.location.pathname.split('/').pop();
+      navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if ((href === current) || (href === '#' && window.location.hash)) {
+          link.classList.add('active');
+        } else if (href !== '#' && current === '' && href === 'index.html') {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
       </ul>
       <div class="menu-toggle"><i class="fas fa-bars"></i></div>
     </div>
@@ -27,20 +42,32 @@
     <div class="container">
       <h1>Find Your Dream Home</h1>
       <p style="font-size:1.2em; margin-bottom:2em;">Browse the best properties, top houses, and upcoming projects in your city.</p>
-      <form class="filter-box">
-        <select name="type">
-          <option value="">Property Type</option>
-          <option value="apartment">Apartment</option>
-          <option value="house">House</option>
-        </select>
-        <select name="location">
-          <option value="">Location</option>
-          <option value="city1">City 1</option>
-          <option value="city2">City 2</option>
-        </select>
-        <input type="number" name="min_price" placeholder="Min Price">
-        <input type="number" name="max_price" placeholder="Max Price">
-        <button class="btn" type="submit">Search</button>
+      <form class="filter-box" style="background:rgba(255,255,255,0.95);box-shadow:0 2px 12px rgba(30,144,255,0.08);border-radius:16px;padding:1.5em 2em;display:flex;flex-wrap:wrap;gap:1em;align-items:center;justify-content:center;">
+        <div style="display:flex;flex-direction:column;align-items:flex-start;gap:0.3em;">
+          <label for="type" style="font-weight:600;color:#1E90FF;font-size:0.95em;">Type</label>
+          <select id="type" name="type" style="padding:0.7em 1em;border-radius:8px;border:1px solid #cce0fa;font-size:1em;min-width:140px;">
+            <option value="">Property Type</option>
+            <option value="apartment">Apartment</option>
+            <option value="house">House</option>
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-start;gap:0.3em;">
+          <label for="location" style="font-weight:600;color:#1E90FF;font-size:0.95em;">Location</label>
+          <select id="location" name="location" style="padding:0.7em 1em;border-radius:8px;border:1px solid #cce0fa;font-size:1em;min-width:140px;">
+            <option value="">Location</option>
+            <option value="city1">City 1</option>
+            <option value="city2">City 2</option>
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-start;gap:0.3em;">
+          <label for="min_price" style="font-weight:600;color:#1E90FF;font-size:0.95em;">Min Price</label>
+          <input type="number" id="min_price" name="min_price" placeholder="Min Price" style="padding:0.7em 1em;border-radius:8px;border:1px solid #cce0fa;font-size:1em;min-width:120px;">
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-start;gap:0.3em;">
+          <label for="max_price" style="font-weight:600;color:#1E90FF;font-size:0.95em;">Max Price</label>
+          <input type="number" id="max_price" name="max_price" placeholder="Max Price" style="padding:0.7em 1em;border-radius:8px;border:1px solid #cce0fa;font-size:1em;min-width:120px;">
+        </div>
+        <button class="btn" type="submit" style="margin-top:1.7em;min-width:120px;font-size:1.1em;">Search</button>
       </form>
     </div>
   </section>
@@ -94,6 +121,60 @@
     </div>
   </section>
 
+  <!-- Why Choose Us Section -->
+  <section class="container" style="margin-top:3em;">
+    <h2 style="margin-bottom:1em; text-align:center;">Why Choose Us</h2>
+    <div class="why-choose-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2em;">
+      <div class="why-card why1">
+        <div class="why-icon"><i class="fas fa-home"></i></div>
+        <h3>Wide Property Selection</h3>
+        <p>Choose from a diverse range of properties to suit every need and budget.</p>
+      </div>
+      <div class="why-card why2">
+        <div class="why-icon"><i class="fas fa-user-shield"></i></div>
+        <h3>Trusted by Clients</h3>
+        <p>Our reputation is built on trust, transparency, and client satisfaction.</p>
+      </div>
+      <div class="why-card why3">
+        <div class="why-icon"><i class="fas fa-handshake"></i></div>
+        <h3>Expert Guidance</h3>
+        <p>Our experienced team guides you through every step of the process.</p>
+      </div>
+      <div class="why-card why4">
+        <div class="why-icon"><i class="fas fa-bolt"></i></div>
+        <h3>Fast & Easy Process</h3>
+        <p>Enjoy a seamless, hassle-free experience from search to closing.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- What We Do Section -->
+  <section class="container" style="margin-top:3em;">
+    <h2 style="margin-bottom:1em; text-align:center;">What We Do</h2>
+    <div class="what-we-do-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2em;">
+      <div class="what-card" style="background:linear-gradient(135deg,#1E90FF 60%,#6EE7B7 100%);color:#fff;padding:2em 1em;border-radius:8px;box-shadow:0 4px 16px rgba(30,144,255,0.10);text-align:center;">
+        <div style="font-size:2.5em;margin-bottom:0.5em;"><i class="fas fa-search-location"></i></div>
+        <h3>Property Search</h3>
+        <p>We help you find the perfect property that matches your lifestyle and budget.</p>
+      </div>
+      <div class="what-card" style="background:linear-gradient(135deg,#FF8C00 60%,#FFD700 100%);color:#fff;padding:2em 1em;border-radius:8px;box-shadow:0 4px 16px rgba(255,140,0,0.10);text-align:center;">
+        <div style="font-size:2.5em;margin-bottom:0.5em;"><i class="fas fa-file-signature"></i></div>
+        <h3>Buy & Sell</h3>
+        <p>We facilitate smooth buying and selling processes for both owners and seekers.</p>
+      </div>
+      <div class="what-card" style="background:linear-gradient(135deg,#8B5CF6 60%,#F472B6 100%);color:#fff;padding:2em 1em;border-radius:8px;box-shadow:0 4px 16px rgba(139,92,246,0.10);text-align:center;">
+        <div style="font-size:2.5em;margin-bottom:0.5em;"><i class="fas fa-tools"></i></div>
+        <h3>Property Management</h3>
+        <p>We offer property management services to keep your investment safe and profitable.</p>
+      </div>
+      <div class="what-card" style="background:linear-gradient(135deg,#06B6D4 60%,#FDE68A 100%);color:#fff;padding:2em 1em;border-radius:8px;box-shadow:0 4px 16px rgba(6,182,212,0.10);text-align:center;">
+        <div style="font-size:2.5em;margin-bottom:0.5em;"><i class="fas fa-headset"></i></div>
+        <h3>Consulting & Support</h3>
+        <p>Our experts provide guidance and support throughout your real estate journey.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- Reviews Section -->
   <section class="container" style="margin-top:3em;">
     <h2 style="margin-bottom:1em;">What Our Clients Say</h2>
@@ -110,6 +191,18 @@
         <p style="font-size:1.1em;">"I was able to sell my house quickly and at a good price. Thank you!"</p>
         <div style="margin-top:1em; font-weight:600;">- Linda W.</div>
       </div>
+    </div>
+  </section>
+
+  <!-- Newsletter Section -->
+  <section class="container" style="margin:3em auto 0 auto;max-width:600px;">
+    <div style="background:linear-gradient(135deg,#1E90FF 60%,#6EE7B7 100%);color:#fff;padding:2.5em 2em;border-radius:12px;box-shadow:0 4px 24px rgba(30,144,255,0.10);text-align:center;">
+      <h2 style="margin-bottom:0.5em;">Subscribe to Our Newsletter</h2>
+      <p style="margin-bottom:1.5em;">Get the latest property updates, news, and exclusive offers straight to your inbox.</p>
+      <form style="display:flex;flex-wrap:wrap;gap:1em;justify-content:center;align-items:center;max-width:420px;margin:0 auto;">
+        <input type="email" name="newsletter_email" placeholder="Enter your email" required style="flex:2;min-width:180px;padding:0.8em 1em;border:none;border-radius:6px 0 0 6px;font-size:1em;outline:none;">
+        <button type="submit" class="btn" style="flex:1;min-width:120px;padding:0.8em 1em;border-radius:0 6px 6px 0;font-size:1em;background:#fff;color:#1E90FF;font-weight:700;transition:background 0.2s, color 0.2s;">Subscribe</button>
+      </form>
     </div>
   </section>
 
@@ -142,35 +235,34 @@
   </section>
 
   <!-- Footer -->
-  <footer class="footer">
+  <footer class="footer" style="background: linear-gradient(90deg, #1E90FF 60%, #6EE7B7 100%); color: #fff; padding: 3em 0 1.5em 0; margin-top: 3em;">
     <div class="container" style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:2em; align-items:flex-start;">
       <div style="flex:1; min-width:200px;">
-        <h3 style="color:#1E90FF;">RealEstate</h3>
-        <p>Your trusted partner for buying, selling, and renting properties.</p>
+        <h3 style="color:#fff; letter-spacing:1px; font-weight:700;">RealEstate</h3>
+        <p style="opacity:0.95;">Your trusted partner for buying, selling, and renting properties.</p>
+        <div style="margin-top:1.5em;">
+          <a href="#" style="color:#fff; margin-right:1em;"><i class="fab fa-facebook fa-lg"></i></a>
+          <a href="#" style="color:#fff; margin-right:1em;"><i class="fab fa-twitter fa-lg"></i></a>
+          <a href="#" style="color:#fff;"><i class="fab fa-instagram fa-lg"></i></a>
+        </div>
       </div>
       <div style="flex:1; min-width:200px;">
-        <h4>Quick Links</h4>
+        <h4 style="color:#fff;">Quick Links</h4>
         <ul style="list-style:none; padding:0;">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="property_list.html">Properties</a></li>
-          <li><a href="#contact">Contact</a></li>
-          <li><a href="login.html">Login/Register</a></li>
+          <li><a href="index.html" style="color:#fff; opacity:0.95; text-decoration:none; transition:opacity 0.2s;">Home</a></li>
+          <li><a href="property_list.html" style="color:#fff; opacity:0.95; text-decoration:none; transition:opacity 0.2s;">Properties</a></li>
+          <li><a href="#contact" style="color:#fff; opacity:0.95; text-decoration:none; transition:opacity 0.2s;">Contact</a></li>
+          <li><a href="login.html" style="color:#fff; opacity:0.95; text-decoration:none; transition:opacity 0.2s;">Login/Register</a></li>
         </ul>
       </div>
       <div style="flex:1; min-width:200px;">
-        <h4>Contact Us</h4>
-        <p>Email: info@realestate.com</p>
-        <p>Phone: +123 456 7890</p>
-        <p>123 Main Street, City 1</p>
+        <h4 style="color:#fff;">Contact Us</h4>
+        <p style="opacity:0.95;">Email: info@realestate.com</p>
+        <p style="opacity:0.95;">Phone: +123 456 7890</p>
+        <p style="opacity:0.95;">123 Main Street, City 1</p>
       </div>
     </div>
-    <div style="text-align:center; color:#888; margin-top:2em;">&copy; 2025 RealEstate. All rights reserved.</div>
-  </footer>
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <p>&copy; 2025 RealEstate. All rights reserved.</p>
-    </div>
+    <div style="text-align:center; color:#fff; opacity:0.85; margin-top:2em; font-size:1.1em; letter-spacing:0.5px;">&copy; 2025 RealEstate. All rights reserved.</div>
   </footer>
   <script src="main.js"></script>
 </body>

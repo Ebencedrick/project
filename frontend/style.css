@@ -1,3 +1,47 @@
+.btn-cancel {
+  background: linear-gradient(90deg,#e53935 60%,#e35d5b 100%);
+  color: #fff;
+  margin-left: 0.5em;
+  font-weight: 700;
+  border: none;
+  border-radius: 30px;
+  padding: 0.7em 1.5em;
+  box-shadow: 0 2px 8px rgba(229,57,53,0.10);
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.btn-cancel:hover, .btn-cancel:focus {
+  background: linear-gradient(90deg,#b71c1c 60%,#e53935 100%);
+  color: #fff;
+  box-shadow: 0 6px 24px rgba(229,57,53,0.15);
+  transform: translateY(-2px) scale(1.04);
+}
+/* Why Choose Us custom cards */
+.why-card {
+  color: #fff;
+  padding: 2em 1em;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+  cursor: pointer;
+}
+.why-card .why-icon {
+  font-size: 2.5em;
+  margin-bottom: 0.5em;
+}
+.why1 { background: linear-gradient(135deg,#F43F5E 60%,#FBBF24 100%); }
+.why2 { background: linear-gradient(135deg,#10B981 60%,#3B82F6 100%); }
+.why3 { background: linear-gradient(135deg,#6366F1 60%,#EC4899 100%); }
+.why4 { background: linear-gradient(135deg,#F59E42 60%,#F43F5E 100%); }
+.why-card:hover, .what-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  filter: brightness(1.08) saturate(1.2);
+}
+.what-card {
+  transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+  cursor: pointer;
+}
 /* Pure CSS for Real Estate E-Commerce Website */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 html, body {
@@ -74,17 +118,27 @@ html, body {
   font-size: 1em;
 }
 .btn {
-  background: #1E90FF;
+  background: linear-gradient(90deg,#1E90FF 60%,#6EE7B7 100%);
   color: #fff;
   border: none;
-  padding: 0.6em 1.2em;
-  border-radius: 4px;
-  font-weight: 600;
+  padding: 0.7em 1.5em;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 1em;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(30,144,255,0.10);
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
+  outline: none;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  display: inline-block;
 }
-.btn:hover {
-  background: #FF8C00;
+.btn:hover, .btn:focus {
+  background: linear-gradient(90deg,#FF8C00 60%,#FFD700 100%);
+  color: #fff;
+  box-shadow: 0 6px 24px rgba(255,140,0,0.15);
+  transform: translateY(-2px) scale(1.04);
 }
 .container {
   max-width: 1200px;
@@ -106,6 +160,13 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+  cursor: pointer;
+}
+.card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 8px 32px rgba(30,144,255,0.18);
+  filter: brightness(1.08) saturate(1.2);
 }
 .card img {
   width: 100%;
