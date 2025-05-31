@@ -6,57 +6,180 @@
   <title>Admin Dashboard</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { margin: 0; background: linear-gradient(135deg, #e0e7ff 0%, #f0fdfa 100%); font-family: 'Segoe UI', Arial, sans-serif; min-height: 100vh; }
+    .admin-topbar { width: 100%; background: linear-gradient(90deg, #2563eb 60%, #38bdf8 100%); color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 1.1em 2em; box-shadow: 0 2px 12px rgba(37,99,235,0.10); position: fixed; top: 0; left: 0; z-index: 1000; }
+    .admin-topbar .logo { font-size: 1.5em; font-weight: 800; letter-spacing: 1px; }
+    .admin-topbar .topbar-right { display: flex; align-items: center; gap: 1.5em; }
+    .admin-topbar .user { font-weight: 600; font-size: 1em; display: flex; align-items: center; gap: 0.5em; }
+    .admin-topbar .logout { color: #fff; background: #dc3545; border: none; border-radius: 6px; padding: 0.5em 1.1em; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .admin-topbar .logout:hover { background: #b91c1c; }
+    .admin-layout { display: flex; margin-top: 70px; min-height: 100vh; }
+    .admin-sidebar { width: 230px; background: linear-gradient(135deg, #f0fdfa 60%, #e0e7ff 100%); box-shadow: 2px 0 16px rgba(37,99,235,0.10); border-radius: 0 16px 16px 0; padding: 2.2em 1.2em 2em 1.2em; display: flex; flex-direction: column; gap: 2em; position: fixed; top: 70px; left: 0; bottom: 0; z-index: 900; }
+    .admin-sidebar ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.2em; }
+    .admin-sidebar a { color: #334155; font-weight: 600; border-radius: 8px; padding: 0.7em 1em; display: flex; align-items: center; gap: 0.7em; text-decoration: none; transition: background 0.2s, color 0.2s; }
+    .admin-sidebar a.active, .admin-sidebar a:hover { background: linear-gradient(90deg, #2563eb 60%, #38bdf8 100%); color: #fff; box-shadow: 0 2px 8px rgba(37,99,235,0.10); }
+    .admin-main { flex: 1; margin-left: 230px; padding: 2.5em 2em 2em 2em; background: transparent; min-height: 100vh; }
+    @media (max-width: 900px) { .admin-layout { flex-direction: column; } .admin-sidebar { position: static; width: 100%; border-radius: 0 0 16px 16px; top: 0; } .admin-main { margin-left: 0; } }
+    .dashboard-cards { display: flex; gap: 2em; margin-bottom: 2em; flex-wrap: wrap; }
+    .dashboard-card { background: linear-gradient(90deg,#2563eb 60%,#38bdf8 100%); color: #fff; font-size: 1.2em; font-weight: 700; box-shadow: 0 2px 12px rgba(37,99,235,0.08); border-radius: 12px; padding: 1.2em 2em; min-width: 170px; flex: 1; text-align: center; }
+    .dashboard-section { background: linear-gradient(90deg, #f0fdfa 60%, #e0e7ff 100%); border-radius: 16px; box-shadow: 0 2px 16px rgba(37,99,235,0.10); padding: 2em 1.5em; margin-bottom: 2em; }
+    .dashboard-section h3 { font-size: 1.3em; color: #2563eb; font-weight: 700; margin-bottom: 1em; letter-spacing: 0.5px; }
+    .activity-log { display: flex; gap: 1em; flex-wrap: wrap; padding-left: 0; color: #222; }
+    .activity-log .activity-item { background: linear-gradient(90deg, #e0e7ff 60%, #f0fdfa 100%); border-radius: 10px; box-shadow: 0 1px 8px rgba(37,99,235,0.06); padding: 1em 1.3em; color: #222; min-width: 220px; display: flex; align-items: center; gap: 0.7em; }
+    .quick-actions { display: flex; gap: 1.5em; margin-top: 1em; }
+    .quick-actions button { background: linear-gradient(90deg, #2563eb 60%, #38bdf8 100%); color: #fff; border: none; border-radius: 8px; padding: 0.7em 1.5em; font-weight: 600; font-size: 1em; cursor: pointer; transition: background 0.2s; }
+    .quick-actions button:hover { background: #2563eb; }
+  </style>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="container">
-      <div class="logo">RealEstate</div>
-      <ul class="nav-links">
-        <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
-        <li><a href="property_list.html" class="nav-link"><i class="fas fa-building"></i> Properties</a></li>
-        <li><a href="#contact" class="nav-link"><i class="fas fa-envelope"></i> Contact</a></li>
-        <li><a href="login.html" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const navLinks = document.querySelectorAll('.nav-link');
-      const current = window.location.pathname.split('/').pop();
-      navLinks.forEach(link => {
-        const href = link.getAttribute('href');
-        if ((href === current) || (href === '#' && window.location.hash)) {
-          link.classList.add('active');
-        } else if (href !== '#' && current === '' && href === 'index.html') {
-          link.classList.add('active');
-        }
-      });
-    });
-  </script>
-      </ul>
-      <div class="menu-toggle"><i class="fas fa-bars"></i></div>
+  <div class="admin-topbar">
+    <div class="logo"><i class="fas fa-building"></i> RealEstate Admin</div>
+    <div class="topbar-right">
+      <div class="user"><i class="fas fa-user-circle"></i> Admin</div>
+      <button class="logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
     </div>
-  </nav>
-  <div class="container dashboard">
-    <aside class="sidebar">
+  </div>
+  <div class="admin-layout">
+    <nav class="admin-sidebar">
       <ul>
-        <li><a href="#" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="admin_dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
         <li><a href="manage_users.html"><i class="fas fa-users"></i> Manage Users</a></li>
         <li><a href="manage_properties.html"><i class="fas fa-home"></i> Manage Properties</a></li>
-        <li><a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        <li><a href="#" id="messagesTab"><i class="fas fa-comments"></i> Messages</a></li>
+        <li><a href="#" id="settingsTab"><i class="fas fa-cog"></i> Settings</a></li>
       </ul>
-    </aside>
-    <main class="dashboard-main">
-      <h2>Admin Dashboard</h2>
-      <div style="display:flex; gap:2em; margin-bottom:2em;">
-        <div class="card">Users: <span id="user-count">12</span></div>
-        <div class="card">Properties: <span id="property-count">8</span></div>
-        <div class="card">Pending: <span id="pending-count">2</span></div>
+    </nav>
+    <main class="admin-main">
+      <h2 style="font-size:2.1em; font-weight:800; color:#1E90FF; margin-bottom:1.2em;">Admin Dashboard</h2>
+      <div class="dashboard-cards">
+        <div class="dashboard-card">Users<br><span id="user-count">12</span></div>
+        <div class="dashboard-card">Properties<br><span id="property-count">8</span></div>
+        <div class="dashboard-card">Pending<br><span id="pending-count">2</span></div>
       </div>
-      <h3>Recent Activity</h3>
-      <ul class="activity-log">
-        <li>User John Doe registered as Agent</li>
-        <li>Property "Modern Apartment" submitted for approval</li>
-        <li>Property "Cozy House" approved</li>
-      </ul>
+      <section class="dashboard-section">
+        <h3>Recent Activity</h3>
+        <div class="activity-log">
+          <div class="activity-item"><i class="fas fa-user-plus" style="color:#1E90FF;"></i> User John Doe registered as Agent</div>
+          <div class="activity-item"><i class="fas fa-home" style="color:#6EE7B7;"></i> Property "Modern Apartment" submitted for approval</div>
+          <div class="activity-item"><i class="fas fa-check-circle" style="color:#28a745;"></i> Property "Cozy House" approved</div>
+        </div>
+      </section>
+      <section class="dashboard-section">
+        <h3>Quick Actions</h3>
+        <div class="quick-actions">
+          <button id="addUserBtn"><i class="fas fa-user-plus"></i> Add User</button>
+          <button id="addPropertyBtn"><i class="fas fa-plus"></i> Add Property</button>
+        </div>
+      </section>
     </main>
   </div>
+
+  <!-- Add User Modal -->
+  <div id="addUserModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.25);z-index:2000;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:14px;box-shadow:0 2px 16px rgba(37,99,235,0.13);padding:2em 2.5em;min-width:320px;max-width:90vw;position:relative;">
+      <button id="closeUserModal" style="position:absolute;top:1em;right:1em;background:none;border:none;font-size:1.3em;color:#2563eb;cursor:pointer;"><i class="fas fa-times"></i></button>
+      <h3 style="color:#2563eb;font-weight:800;margin-bottom:1em;">Add New User</h3>
+      <form id="userForm">
+        <div style="margin-bottom:1em;">
+          <label for="username" style="font-weight:600;color:#2563eb;">Username</label><br>
+          <input type="text" id="username" name="username" required style="width:100%;padding:0.5em 0.8em;border-radius:7px;border:1px solid #a5b4fc;font-size:1em;">
+        </div>
+        <div style="margin-bottom:1em;">
+          <label for="email" style="font-weight:600;color:#2563eb;">Email</label><br>
+          <input type="email" id="email" name="email" required style="width:100%;padding:0.5em 0.8em;border-radius:7px;border:1px solid #a5b4fc;font-size:1em;">
+        </div>
+        <div style="margin-bottom:1em;">
+          <label for="role" style="font-weight:600;color:#2563eb;">Role</label><br>
+          <select id="role" name="role" required style="width:100%;padding:0.5em 0.8em;border-radius:7px;border:1px solid #a5b4fc;font-size:1em;">
+            <option value="admin">Admin</option>
+            <option value="agent">Agent</option>
+            <option value="user">User</option>
+          </select>
+        </div>
+        <button type="submit" style="background:linear-gradient(90deg,#2563eb 60%,#38bdf8 100%);color:#fff;border:none;border-radius:8px;padding:0.7em 2em;font-weight:700;font-size:1.1em;box-shadow:0 2px 8px rgba(37,99,235,0.10);transition:background 0.2s;">Add User</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Property Modal -->
+  <div id="addPropertyModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.25);z-index:2000;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:14px;box-shadow:0 2px 16px rgba(37,99,235,0.13);padding:2em 2.5em;min-width:320px;max-width:90vw;position:relative;">
+      <button id="closePropertyModal" style="position:absolute;top:1em;right:1em;background:none;border:none;font-size:1.3em;color:#2563eb;cursor:pointer;"><i class="fas fa-times"></i></button>
+      <h3 style="color:#2563eb;font-weight:800;margin-bottom:1em;">Add New Property</h3>
+      <form id="propertyForm">
+        <div style="margin-bottom:1em;">
+          <label for="propertyTitle" style="font-weight:600;color:#2563eb;">Title</label><br>
+          <input type="text" id="propertyTitle" name="propertyTitle" required style="width:100%;padding:0.5em 0.8em;border-radius:7px;border:1px solid #a5b4fc;font-size:1em;">
+        </div>
+        <div style="margin-bottom:1em;">
+          <label for="propertyPrice" style="font-weight:600;color:#2563eb;">Price</label><br>
+          <input type="number" id="propertyPrice" name="propertyPrice" required style="width:100%;padding:0.5em 0.8em;border-radius:7px;border:1px solid #a5b4fc;font-size:1em;">
+        </div>
+        <div style="margin-bottom:1em;">
+          <label for="propertyType" style="font-weight:600;color:#2563eb;">Type</label><br>
+          <select id="propertyType" name="propertyType" required style="width:100%;padding:0.5em 0.8em;border-radius:7px;border:1px solid #a5b4fc;font-size:1em;">
+            <option value="apartment">Apartment</option>
+            <option value="house">House</option>
+          </select>
+        </div>
+        <div style="margin-bottom:1.2em;">
+          <label style="font-weight:600;color:#2563eb;">Image/Video</label><br>
+          <input type="file" id="modalMediaInput" accept="image/*,video/*" style="display:none;">
+          <div id="modalMediaPlaceholder" style="display:flex;align-items:center;justify-content:center;height:60px;background:#e0e7ff;border:2px dashed #a5b4fc;border-radius:8px;color:#94a3b8;font-size:0.98em;cursor:pointer;">
+            <span id="modalMediaPlaceholderText" style="display:flex;align-items:center;gap:0.5em;"><i class="fas fa-image"></i> Upload image or video (click here)</span>
+          </div>
+        </div>
+        <button type="submit" style="background:linear-gradient(90deg,#2563eb 60%,#38bdf8 100%);color:#fff;border:none;border-radius:8px;padding:0.7em 2em;font-weight:700;font-size:1.1em;box-shadow:0 2px 8px rgba(37,99,235,0.10);transition:background 0.2s;">Add Property</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+  <script>
+    // Modal logic
+    const addUserBtn = document.getElementById('addUserBtn');
+    const addPropertyBtn = document.getElementById('addPropertyBtn');
+    const addUserModal = document.getElementById('addUserModal');
+    const addPropertyModal = document.getElementById('addPropertyModal');
+    const closeUserModal = document.getElementById('closeUserModal');
+    const closePropertyModal = document.getElementById('closePropertyModal');
+
+    addUserBtn.onclick = () => addUserModal.style.display = 'flex';
+    addPropertyBtn.onclick = () => addPropertyModal.style.display = 'flex';
+    closeUserModal.onclick = () => addUserModal.style.display = 'none';
+    closePropertyModal.onclick = () => addPropertyModal.style.display = 'none';
+    window.onclick = function(event) {
+      if (event.target === addUserModal) addUserModal.style.display = 'none';
+      if (event.target === addPropertyModal) addPropertyModal.style.display = 'none';
+    };
+    // Demo form submit
+    document.getElementById('userForm').onsubmit = function(e) {
+      e.preventDefault();
+      alert('User added! (Demo only)');
+      addUserModal.style.display = 'none';
+      this.reset();
+    };
+    document.getElementById('propertyForm').onsubmit = function(e) {
+      e.preventDefault();
+      alert('Property added! (Demo only)');
+      addPropertyModal.style.display = 'none';
+      this.reset();
+    };
+    // Modal property image/video placeholder logic
+    const modalMediaInput = document.getElementById('modalMediaInput');
+    const modalMediaPlaceholder = document.getElementById('modalMediaPlaceholder');
+    const modalMediaPlaceholderText = document.getElementById('modalMediaPlaceholderText');
+    if (modalMediaInput && modalMediaPlaceholder) {
+      modalMediaPlaceholder.onclick = () => modalMediaInput.click();
+      modalMediaInput.onchange = function() {
+        if (modalMediaInput.files && modalMediaInput.files[0]) {
+          modalMediaPlaceholderText.innerHTML = `<i class='fas fa-file'></i> ${modalMediaInput.files[0].name}`;
+        } else {
+          modalMediaPlaceholderText.innerHTML = `<i class='fas fa-image'></i> Upload image or video (click here)`;
+        }
+      };
+    }
+  </script>
 </body>
 </html>

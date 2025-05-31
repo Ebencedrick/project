@@ -5,95 +5,474 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Manage Properties</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { margin: 0; background: linear-gradient(135deg, #e0e7ff 0%, #f0fdfa 100%); font-family: 'Segoe UI', Arial, sans-serif; min-height: 100vh; }
+    .admin-topbar { width: 100%; background: linear-gradient(90deg, #2563eb 60%, #38bdf8 100%); color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 1.1em 2em; box-shadow: 0 2px 12px rgba(37,99,235,0.10); position: fixed; top: 0; left: 0; z-index: 1000; }
+    .admin-topbar .logo { font-size: 1.5em; font-weight: 800; letter-spacing: 1px; }
+    .admin-topbar .topbar-right { display: flex; align-items: center; gap: 1.5em; }
+    .admin-topbar .user { font-weight: 600; font-size: 1em; display: flex; align-items: center; gap: 0.5em; }
+    .admin-topbar .logout { color: #fff; background: #dc3545; border: none; border-radius: 6px; padding: 0.5em 1.1em; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .admin-topbar .logout:hover { background: #b91c1c; }
+    .admin-layout { display: flex; margin-top: 70px; min-height: 100vh; }
+    .admin-sidebar { width: 230px; background: linear-gradient(135deg, #f0fdfa 60%, #e0e7ff 100%); box-shadow: 2px 0 16px rgba(37,99,235,0.10); border-radius: 0 16px 16px 0; padding: 2.2em 1.2em 2em 1.2em; display: flex; flex-direction: column; gap: 2em; position: fixed; top: 70px; left: 0; bottom: 0; z-index: 900; }
+    .admin-sidebar ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.2em; }
+    .admin-sidebar a { color: #334155; font-weight: 600; border-radius: 8px; padding: 0.7em 1em; display: flex; align-items: center; gap: 0.7em; text-decoration: none; transition: background 0.2s, color 0.2s; }
+    .admin-sidebar a.active, .admin-sidebar a:hover { background: linear-gradient(90deg, #2563eb 60%, #38bdf8 100%); color: #fff; box-shadow: 0 2px 8px rgba(37,99,235,0.10); }
+    .admin-main { flex: 1; margin-left: 230px; padding: 2.5em 2em 2em 2em; background: transparent; min-height: 100vh; }
+    @media (max-width: 900px) { .admin-layout { flex-direction: column; } .admin-sidebar { position: static; width: 100%; border-radius: 0 0 16px 16px; top: 0; } .admin-main { margin-left: 0; } }
+    .section-title { font-size: 2em; font-weight: 800; color: #2563eb; margin-bottom: 1.2em; letter-spacing: 1px; }
+    .filter-box { background: linear-gradient(90deg, #f0fdfa 60%, #e0e7ff 100%); box-shadow: 0 2px 12px rgba(37,99,235,0.08); border-radius: 14px; padding: 1em 1.5em; display: flex; flex-wrap: wrap; gap: 1em; align-items: flex-end; justify-content: flex-start; margin-bottom: 1.5em; max-width: 900px; }
+    .filter-box label { font-weight: 600; color: #2563eb; font-size: 0.9em; line-height: 1.1; margin-bottom: 0.2em; }
+    .filter-box input, .filter-box select { padding: 0.3em 0.7em; border-radius: 8px; border: 1px solid #a5b4fc; font-size: 1em; min-width: 100px; height: 2.2em; background: #fff; }
+    .filter-box button { margin-top: 0.5em; min-width: 90px; font-size: 1em; padding: 0.4em 1.2em; height: 2.4em; background: linear-gradient(90deg, #2563eb 60%, #38bdf8 100%); color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 8px rgba(37,99,235,0.10); transition: background 0.2s; }
+    .filter-box button:hover { background: #2563eb; }
+    .properties-table { width: 100%; background: linear-gradient(90deg, #f0fdfa 60%, #e0e7ff 100%); border-radius: 14px; box-shadow: 0 2px 12px rgba(37,99,235,0.08); padding: 1.5em; margin-bottom: 2em; overflow-x: auto; }
+    .properties-table table { width: 100%; border-collapse: collapse; }
+    .properties-table th, .properties-table td { padding: 1em 0.7em; text-align: left; border-bottom: 1px solid #c7d2fe; }
+    .properties-table th { color: #2563eb; font-size: 1.05em; font-weight: 700; background: #e0e7ff; letter-spacing: 0.5px; }
+    .properties-table tr:last-child td { border-bottom: none; }
+    .properties-table button { margin-right: 0.5em; border: none; border-radius: 8px; padding: 0.4em 1.1em; font-weight: 600; color: #fff; cursor: pointer; box-shadow: 0 2px 8px rgba(37,99,235,0.10); transition: background 0.2s; }
+    .properties-table .approve { background: linear-gradient(90deg, #22d3ee 60%, #38bdf8 100%); color: #fff; }
+    .properties-table .approve:hover { background: #0ea5e9; }
+    .properties-table .reject, .properties-table .delete { background: linear-gradient(90deg, #f43f5e 60%, #fbbf24 100%); color: #fff; }
+    .properties-table .reject:hover, .properties-table .delete:hover { background: #be123c; }
+    .dashboard-section { background: linear-gradient(90deg, #f0fdfa 60%, #e0e7ff 100%); border-radius: 16px; box-shadow: 0 2px 16px rgba(37,99,235,0.10); padding: 2em 1.5em; margin-bottom: 2em; }
+    .dashboard-section h3 { font-size: 1.3em; color: #2563eb; font-weight: 700; margin-bottom: 1em; letter-spacing: 0.5px; }
+    .activity-log { display: flex; gap: 1em; flex-wrap: wrap; padding-left: 0; color: #222; }
+    .activity-log .activity-item { background: linear-gradient(90deg, #e0e7ff 60%, #f0fdfa 100%); border-radius: 10px; box-shadow: 0 1px 8px rgba(37,99,235,0.06); padding: 1em 1.3em; color: #222; min-width: 220px; display: flex; align-items: center; gap: 0.7em; }
+    .add-property-form { display: flex; flex-wrap: wrap; gap: 1.5em; align-items: flex-end; background: linear-gradient(90deg, #f0fdfa 60%, #e0e7ff 100%); border-radius: 12px; padding: 1.5em 1.2em; box-shadow: 0 1px 8px rgba(37,99,235,0.08); margin-top: 1em; }
+    .add-property-form label { font-weight: 600; color: #2563eb; margin-bottom: 0.3em; }
+    .add-property-form input, .add-property-form select { padding: 0.5em 0.8em; border-radius: 8px; border: 1px solid #a5b4fc; font-size: 1em; background: #fff; }
+    .add-property-form button { background: linear-gradient(90deg, #2563eb 60%, #38bdf8 100%); color: #fff; border: none; border-radius: 10px; padding: 0.8em 2em; font-weight: 700; font-size: 1.1em; box-shadow: 0 2px 12px rgba(37,99,235,0.10); transition: background 0.2s; }
+    .add-property-form button:hover { background: #2563eb; }
+  </style>
 </head>
 <body>
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="container">
-      <div class="logo">RealEstate</div>
-      <ul class="nav-links">
-        <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
-        <li><a href="property_list.html" class="nav-link"><i class="fas fa-building"></i> Properties</a></li>
-        <li><a href="#contact" class="nav-link"><i class="fas fa-envelope"></i> Contact</a></li>
-        <li><a href="login.html" class="nav-link"><i class="fas fa-user"></i> Login/Register</a></li>
-      </ul>
-      <div class="menu-toggle"><i class="fas fa-bars"></i></div>
+  <div class="admin-topbar">
+    <div class="logo"><i class="fas fa-building"></i> RealEstate Admin</div>
+    <div class="topbar-right">
+      <div class="user" id="adminProfileDropdown" style="position:relative;cursor:pointer; font-weight:600; font-size:1em; display:flex; align-items:center; gap:0.5em;">
+        <img id="adminProfileImg" src="https://ui-avatars.com/api/?name=Admin&background=2563eb&color=fff" alt="Profile" style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #fff;box-shadow:0 1px 4px rgba(37,99,235,0.10);margin-right:0.5em;vertical-align:middle;">
+        <span>Admin <i class="fas fa-caret-down"></i></span>
+        <input type="file" id="profileImgInput" accept="image/*" style="display:none;">
+        <div id="profileDropdownMenu" style="display:none;position:absolute;right:0;top:110%;background:#fff;border-radius:10px;box-shadow:0 2px 12px rgba(37,99,235,0.12);min-width:180px;z-index:2000;">
+          <a href="#" id="viewProfileBtn" style="display:block;padding:0.9em 1.2em;color:#2563eb;font-weight:600;text-decoration:none;border-bottom:1px solid #e0e7ff;">View Profile</a>
+          <a href="#" id="changeProfileImgBtn" style="display:block;padding:0.9em 1.2em;color:#2563eb;font-weight:600;text-decoration:none;">Change Photo</a>
+        </div>
+      </div>
+      <button class="logout" style="color:#fff; background:#dc3545; border:none; border-radius:6px; padding:0.5em 1.1em; font-weight:600; cursor:pointer; transition:background 0.2s;"><i class="fas fa-sign-out-alt"></i> Logout</button>
     </div>
-  </nav>
-  <div class="container">
-    <h2>Manage Properties</h2>
-    <form class="filter-box" style="background:rgba(255,255,255,0.95);box-shadow:0 2px 8px rgba(30,144,255,0.06);border-radius:12px;padding:0.2em 1em;display:flex;flex-wrap:wrap;gap:0.4em;align-items:flex-end;justify-content:center;margin-bottom:1.2em;max-width:700px;min-height:unset;">
-      <div style="display:flex;flex-direction:column;align-items:flex-start;gap:0;min-width:110px;">
-        <label for="type" style="font-weight:600;color:#1E90FF;font-size:0.8em;line-height:1.1;">Type</label>
-        <select id="type" name="type" style="padding:0.2em 0.5em;border-radius:6px;border:1px solid #cce0fa;font-size:0.95em;min-width:100px;height:2em;">
-          <option value="">All Types</option>
-          <option value="apartment">Apartment</option>
-          <option value="house">House</option>
-        </select>
+  </div>
+  <div class="admin-layout">
+    <nav class="admin-sidebar">
+      <ul>
+        <li><a href="admin_dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="manage_users.html"><i class="fas fa-users"></i> Manage Users</a></li>
+        <li><a href="manage_properties.html" class="active"><i class="fas fa-home"></i> Manage Properties</a></li>
+        <li><a href="#" id="messagesTab"><i class="fas fa-comments"></i> Messages</a></li>
+        <li><a href="#" id="settingsTab"><i class="fas fa-cog"></i> Settings</a></li>
+      </ul>
+    </nav>
+    <main class="admin-main">
+      <div id="propertiesSection">
+        <h2 class="section-title">Manage Properties</h2>
+        <form class="filter-box">
+          <div style="display:flex;flex-direction:column;min-width:120px;">
+            <label for="type">Type</label>
+            <select id="type" name="type">
+              <option value="">All Types</option>
+              <option value="apartment">Apartment</option>
+              <option value="house">House</option>
+            </select>
+          </div>
+          <div style="display:flex;flex-direction:column;min-width:120px;">
+            <label for="status">Status</label>
+            <select id="status" name="status">
+              <option value="">All Statuses</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+          <div style="display:flex;flex-direction:column;min-width:120px;">
+            <label for="min_price">Min Price</label>
+            <input type="number" id="min_price" name="min_price" placeholder="Min">
+          </div>
+          <div style="display:flex;flex-direction:column;min-width:120px;">
+            <label for="max_price">Max Price</label>
+            <input type="number" id="max_price" name="max_price" placeholder="Max">
+          </div>
+          <button type="submit">Filter</button>
+        </form>
+        <div class="properties-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Modern Apartment</td>
+                <td>$250,000</td>
+                <td>Pending</td>
+                <td>
+                  <button class="approve"><i class="fas fa-check"></i> Approve</button>
+                  <button class="reject"><i class="fas fa-times"></i> Reject</button>
+                </td>
+              </tr>
+              <tr>
+                <td>Cozy House</td>
+                <td>$320,000</td>
+                <td>Approved</td>
+                <td>
+                  <button class="delete"><i class="fas fa-trash"></i> Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <section class="dashboard-section">
+          <h3>Recent Activity</h3>
+          <div class="activity-log">
+            <div class="activity-item"><i class="fas fa-user-plus" style="color:#1E90FF;"></i> User John Doe registered as Agent</div>
+            <div class="activity-item"><i class="fas fa-home" style="color:#6EE7B7;"></i> Property "Modern Apartment" submitted for approval</div>
+            <div class="activity-item"><i class="fas fa-check-circle" style="color:#28a745;"></i> Property "Cozy House" approved</div>
+          </div>
+        </section>
+        <section class="dashboard-section">
+          <h3>Add New Property</h3>
+          <form class="add-property-form" style="display:flex;flex-wrap:wrap;gap:1.5em;align-items:flex-end;background:#f8fafc;border-radius:10px;padding:1.5em 1.2em;box-shadow:0 1px 6px rgba(30,144,255,0.06);margin-top:1em;">
+            <div style="display:flex;flex-direction:column;min-width:200px;flex:1;">
+              <label for="new_title" style="font-weight:600;color:#1E90FF;margin-bottom:0.3em;">Title</label>
+              <input type="text" id="new_title" name="new_title" required style="padding:0.5em 0.8em;border-radius:7px;border:1px solid #cce0fa;font-size:1em;">
+            </div>
+            <div style="display:flex;flex-direction:column;min-width:140px;flex:1;">
+              <label for="new_price" style="font-weight:600;color:#1E90FF;margin-bottom:0.3em;">Price</label>
+              <input type="number" id="new_price" name="new_price" required style="padding:0.5em 0.8em;border-radius:7px;border:1px solid #cce0fa;font-size:1em;">
+            </div>
+            <div style="display:flex;flex-direction:column;min-width:140px;flex:1;">
+              <label for="new_type" style="font-weight:600;color:#1E90FF;margin-bottom:0.3em;">Type</label>
+              <select id="new_type" name="new_type" required style="padding:0.5em 0.8em;border-radius:7px;border:1px solid #cce0fa;font-size:1em;">
+                <option value="apartment">Apartment</option>
+                <option value="house">House</option>
+              </select>
+            </div>
+            <div style="display:flex;flex-direction:column;min-width:140px;flex:1;">
+              <label for="new_status" style="font-weight:600;color:#1E90FF;margin-bottom:0.3em;">Status</label>
+              <select id="new_status" name="new_status" required style="padding:0.5em 0.8em;border-radius:7px;border:1px solid #cce0fa;font-size:1em;">
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+            <div style="display:flex;flex-direction:column;min-width:180px;flex:1;">
+              <label style="font-weight:600;color:#1E90FF;margin-bottom:0.3em;">Image/Video</label>
+              <input type="file" id="mediaInput" accept="image/*,video/*" style="display:none;">
+              <div id="mediaPlaceholder" style="display:flex;align-items:center;justify-content:center;height:60px;background:#e0e7ff;border:2px dashed #a5b4fc;border-radius:8px;color:#94a3b8;font-size:0.98em;cursor:pointer;">
+                <span id="mediaPlaceholderText" style="display:flex;align-items:center;gap:0.5em;"><i class="fas fa-image"></i> Upload image or video (click here)</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-end;min-width:160px;">
+              <button type="submit" style="background:linear-gradient(90deg,#1E90FF 60%,#6EE7B7 100%);color:#fff;border:none;border-radius:8px;padding:0.8em 2em;font-weight:700;font-size:1.1em;box-shadow:0 2px 8px rgba(30,144,255,0.08);transition:background 0.2s;">Add Property</button>
+            </div>
+          </form>
+        </section>
       </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-start;gap:0;min-width:110px;">
-        <label for="status" style="font-weight:600;color:#1E90FF;font-size:0.8em;line-height:1.1;">Status</label>
-        <select id="status" name="status" style="padding:0.2em 0.5em;border-radius:6px;border:1px solid #cce0fa;font-size:0.95em;min-width:100px;height:2em;">
-          <option value="">All Statuses</option>
-          <option value="pending">Pending</option>
-          <option value="approved">Approved</option>
-          <option value="rejected">Rejected</option>
-        </select>
+      <!-- MESSAGES SECTION -->
+      <div id="messagesSection" style="display:none;">
+        <h2 class="section-title"><i class="fas fa-comments"></i> Messages</h2>
+        <div class="dashboard-section" style="display:flex;gap:2em;flex-wrap:wrap;align-items:flex-start;">
+          <div style="min-width:220px;max-width:260px;width:100%;background:#f8fafc;border-radius:12px;box-shadow:0 1px 8px rgba(37,99,235,0.08);padding:1em 0.7em;">
+            <h4 style="color:#2563eb;font-weight:700;margin-bottom:0.7em;font-size:1.1em;">Users & Agents</h4>
+            <ul id="chatUserList" style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.5em;">
+              <!-- User list will be populated by JS -->
+            </ul>
+          </div>
+          <div style="flex:1;min-width:320px;max-width:700px;background:#fff;border-radius:12px;box-shadow:0 1px 8px rgba(37,99,235,0.08);padding:1.2em 1em;display:flex;flex-direction:column;">
+            <div id="chatHeader" style="font-weight:700;color:#2563eb;font-size:1.1em;margin-bottom:0.7em;display:flex;align-items:center;gap:0.5em;"><i class="fas fa-user"></i> <span id="chatWith">Select a user</span></div>
+            <div id="chatMessages" style="flex:1;overflow-y:auto;min-height:220px;max-height:340px;background:#f0fdfa;border-radius:8px;padding:1em 0.7em;margin-bottom:1em;display:flex;flex-direction:column;gap:0.7em;"></div>
+            <form id="chatForm" style="display:flex;gap:0.7em;align-items:center;" autocomplete="off">
+              <input id="chatInput" type="text" placeholder="Type a message..." style="flex:1;padding:0.7em 1em;border-radius:8px;border:1px solid #a5b4fc;font-size:1em;" disabled>
+              <button type="submit" style="background:linear-gradient(90deg,#2563eb 60%,#38bdf8 100%);color:#fff;border:none;border-radius:8px;padding:0.7em 1.5em;font-weight:700;font-size:1em;box-shadow:0 2px 8px rgba(37,99,235,0.10);" disabled><i class="fas fa-paper-plane"></i></button>
+            </form>
+          </div>
+        </div>
       </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-start;gap:0;min-width:110px;">
-        <label for="min_price" style="font-weight:600;color:#1E90FF;font-size:0.8em;line-height:1.1;">Min Price</label>
-        <input type="number" id="min_price" name="min_price" placeholder="Min" style="padding:0.2em 0.5em;border-radius:6px;border:1px solid #cce0fa;font-size:0.95em;min-width:80px;height:2em;">
+      <!-- SETTINGS SECTION -->
+      <div id="settingsSection" style="display:none;">
+        <h2 class="section-title"><i class="fas fa-cog"></i> Settings</h2>
+        <div class="dashboard-section" style="max-width:600px;">
+          <form id="settingsForm" style="display:flex;flex-direction:column;gap:1.2em;">
+            <div>
+              <label for="adminName" style="font-weight:600;color:#2563eb;">Admin Name</label>
+              <input type="text" id="adminName" name="adminName" value="Admin" style="padding:0.6em 1em;border-radius:8px;border:1px solid #a5b4fc;font-size:1em;">
+            </div>
+            <div>
+              <label for="adminEmail" style="font-weight:600;color:#2563eb;">Email</label>
+              <input type="email" id="adminEmail" name="adminEmail" value="admin@example.com" style="padding:0.6em 1em;border-radius:8px;border:1px solid #a5b4fc;font-size:1em;">
+            </div>
+            <div>
+              <label for="adminPassword" style="font-weight:600;color:#2563eb;">Password</label>
+              <input type="password" id="adminPassword" name="adminPassword" placeholder="Change password" style="padding:0.6em 1em;border-radius:8px;border:1px solid #a5b4fc;font-size:1em;">
+            </div>
+            <button type="submit" style="background:linear-gradient(90deg,#2563eb 60%,#38bdf8 100%);color:#fff;border:none;border-radius:8px;padding:0.8em 2em;font-weight:700;font-size:1.1em;box-shadow:0 2px 8px rgba(37,99,235,0.10);">Save Changes</button>
+          </form>
+        </div>
       </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-start;gap:0;min-width:110px;">
-        <label for="max_price" style="font-weight:600;color:#1E90FF;font-size:0.8em;line-height:1.1;">Max Price</label>
-        <input type="number" id="max_price" name="max_price" placeholder="Max" style="padding:0.2em 0.5em;border-radius:6px;border:1px solid #cce0fa;font-size:0.95em;min-width:80px;height:2em;">
-      </div>
-      <button class="btn" type="submit" style="margin-top:0.5em;min-width:80px;font-size:0.97em;padding:0.3em 1em;height:2.2em;">Filter</button>
-    </form>
-    <table>
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Price</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Modern Apartment</td>
-          <td>$250,000</td>
-          <td>Pending</td>
-          <td>
-            <button class="btn" style="background:#28a745;">Approve</button>
-            <button class="btn" style="background:#dc3545;">Reject</button>
-          </td>
-        </tr>
-        <tr>
-          <td>Cozy House</td>
-          <td>$320,000</td>
-          <td>Approved</td>
-          <td>
-            <button class="btn" style="background:#dc3545;">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    </main>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const navLinks = document.querySelectorAll('.nav-link');
-      const current = window.location.pathname.split('/').pop();
-      navLinks.forEach(link => {
-        const href = link.getAttribute('href');
-        if ((href === current) || (href === '#' && window.location.hash)) {
-          link.classList.add('active');
-        } else if (href !== '#' && current === '' && href === 'index.html') {
-          link.classList.add('active');
+    // Image/Video placeholder click logic
+    const mediaInput = document.getElementById('mediaInput');
+    const mediaPlaceholder = document.getElementById('mediaPlaceholder');
+    const mediaPlaceholderText = document.getElementById('mediaPlaceholderText');
+    if (mediaInput && mediaPlaceholder) {
+      mediaPlaceholder.onclick = () => mediaInput.click();
+      mediaInput.onchange = function() {
+        if (mediaInput.files && mediaInput.files[0]) {
+          mediaPlaceholderText.innerHTML = `<i class='fas fa-file'></i> ${mediaInput.files[0].name}`;
+        } else {
+          mediaPlaceholderText.innerHTML = `<i class='fas fa-image'></i> Upload image or video (click here)`;
         }
-      });
+      };
+    }
+
+    // --- Admin Profile Dropdown & Image Upload ---
+    const adminProfileDropdown = document.getElementById('adminProfileDropdown');
+    const profileDropdownMenu = document.getElementById('profileDropdownMenu');
+    const profileImgInput = document.getElementById('profileImgInput');
+    const adminProfileImg = document.getElementById('adminProfileImg');
+    const changeProfileImgBtn = document.getElementById('changeProfileImgBtn');
+    const viewProfileBtn = document.getElementById('viewProfileBtn');
+
+    // Toggle dropdown
+    adminProfileDropdown.addEventListener('click', function(e) {
+      if (e.target === changeProfileImgBtn) return; // handled below
+      profileDropdownMenu.style.display = profileDropdownMenu.style.display === 'block' ? 'none' : 'block';
     });
+    document.addEventListener('click', function(e) {
+      if (!adminProfileDropdown.contains(e.target)) profileDropdownMenu.style.display = 'none';
+    });
+
+    // Change profile image
+    changeProfileImgBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      profileImgInput.click();
+    });
+    profileImgInput.addEventListener('change', function() {
+      if (profileImgInput.files && profileImgInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          adminProfileImg.src = e.target.result;
+        };
+        reader.readAsDataURL(profileImgInput.files[0]);
+      }
+    });
+
+    // --- Admin Profile Modal ---
+    // Modal HTML
+    const profileModal = document.createElement('div');
+    profileModal.id = 'profileModal';
+    profileModal.style.display = 'none';
+    profileModal.style.position = 'fixed';
+    profileModal.style.top = '0';
+    profileModal.style.left = '0';
+    profileModal.style.width = '100vw';
+    profileModal.style.height = '100vh';
+    profileModal.style.background = 'rgba(30, 41, 59, 0.18)';
+    profileModal.style.zIndex = '3000';
+    profileModal.innerHTML = `
+      <div style="background:#fff;border-radius:16px;box-shadow:0 4px 32px rgba(37,99,235,0.13);max-width:370px;width:90vw;padding:2.2em 2em 1.5em 2em;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:1em;">
+          <img id="modalProfileImg" src="https://ui-avatars.com/api/?name=Admin&background=2563eb&color=fff" style="width:70px;height:70px;border-radius:50%;object-fit:cover;border:2px solid #2563eb;box-shadow:0 1px 4px rgba(37,99,235,0.10);">
+          <form id="profileModalForm" style="width:100%;display:flex;flex-direction:column;gap:1em;align-items:center;">
+            <div style="width:100%;">
+              <label style="font-weight:600;color:#2563eb;">Name</label>
+              <input type="text" id="modalAdminName" value="Admin" style="width:100%;padding:0.6em 1em;border-radius:8px;border:1px solid #a5b4fc;font-size:1em;" disabled>
+            </div>
+            <div style="width:100%;">
+              <label style="font-weight:600;color:#2563eb;">Email</label>
+              <input type="email" id="modalAdminEmail" value="admin@example.com" style="width:100%;padding:0.6em 1em;border-radius:8px;border:1px solid #a5b4fc;font-size:1em;" disabled>
+            </div>
+            <div style="width:100%;">
+              <label style="font-weight:600;color:#2563eb;">Password</label>
+              <input type="password" id="modalAdminPassword" value="" placeholder="Change password" style="width:100%;padding:0.6em 1em;border-radius:8px;border:1px solid #a5b4fc;font-size:1em;" disabled>
+            </div>
+            <div style="display:flex;gap:1em;justify-content:center;width:100%;margin-top:0.5em;">
+              <button type="button" id="editProfileBtn" style="background:linear-gradient(90deg,#2563eb 60%,#38bdf8 100%);color:#fff;border:none;border-radius:8px;padding:0.7em 1.5em;font-weight:700;font-size:1em;">Edit</button>
+              <button type="submit" id="saveProfileBtn" style="background:linear-gradient(90deg,#6EE7B7 60%,#2563eb 100%);color:#fff;border:none;border-radius:8px;padding:0.7em 1.5em;font-weight:700;font-size:1em;display:none;">Save</button>
+              <button type="button" id="closeProfileBtn" style="background:#e0e7ff;color:#2563eb;border:none;border-radius:8px;padding:0.7em 1.5em;font-weight:700;font-size:1em;">Close</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(profileModal);
+
+    // Open modal
+    viewProfileBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      // Sync modal fields with current values
+      document.getElementById('modalProfileImg').src = adminProfileImg.src;
+      document.getElementById('modalAdminName').value = document.getElementById('adminName').value;
+      document.getElementById('modalAdminEmail').value = document.getElementById('adminEmail').value;
+      document.getElementById('modalAdminPassword').value = '';
+      document.getElementById('modalAdminName').disabled = true;
+      document.getElementById('modalAdminEmail').disabled = true;
+      document.getElementById('modalAdminPassword').disabled = true;
+      document.getElementById('editProfileBtn').style.display = '';
+      document.getElementById('saveProfileBtn').style.display = 'none';
+      profileModal.style.display = 'block';
+      profileDropdownMenu.style.display = 'none';
+    });
+    // Edit button
+    profileModal.addEventListener('click', function(e) {
+      if (e.target.id === 'editProfileBtn') {
+        document.getElementById('modalAdminName').disabled = false;
+        document.getElementById('modalAdminEmail').disabled = false;
+        document.getElementById('modalAdminPassword').disabled = false;
+        document.getElementById('editProfileBtn').style.display = 'none';
+        document.getElementById('saveProfileBtn').style.display = '';
+      }
+    });
+    // Save button
+    document.getElementById('profileModalForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Save changes to main form (demo only)
+      document.getElementById('adminName').value = document.getElementById('modalAdminName').value;
+      document.getElementById('adminEmail').value = document.getElementById('modalAdminEmail').value;
+      profileModal.style.display = 'none';
+      alert('Profile updated! (Demo only)');
+    });
+    // Close button
+    profileModal.addEventListener('click', function(e) {
+      if (e.target.id === 'closeProfileBtn') {
+        profileModal.style.display = 'none';
+      }
+    });
+
+    // Sidebar tab switching logic
+    const propertiesSection = document.getElementById('propertiesSection');
+    const messagesSection = document.getElementById('messagesSection');
+    const settingsSection = document.getElementById('settingsSection');
+    const messagesTab = document.getElementById('messagesTab');
+    const settingsTab = document.getElementById('settingsTab');
+    const sidebarLinks = document.querySelectorAll('.admin-sidebar a');
+
+    function showSection(section) {
+      propertiesSection.style.display = section === 'properties' ? '' : 'none';
+      messagesSection.style.display = section === 'messages' ? '' : 'none';
+      settingsSection.style.display = section === 'settings' ? '' : 'none';
+      sidebarLinks.forEach(link => link.classList.remove('active'));
+      if (section === 'properties') sidebarLinks[2].classList.add('active');
+      if (section === 'messages') messagesTab.classList.add('active');
+      if (section === 'settings') settingsTab.classList.add('active');
+    }
+    messagesTab.addEventListener('click', e => { e.preventDefault(); showSection('messages'); });
+    settingsTab.addEventListener('click', e => { e.preventDefault(); showSection('settings'); });
+    sidebarLinks[2].addEventListener('click', e => { showSection('properties'); });
+
+    // --- Real-time Chat Demo Logic ---
+    // Demo users/agents
+    const chatUsers = [
+      { id: 1, name: 'John Doe (Agent)' },
+      { id: 2, name: 'Jane Smith (User)' },
+      { id: 3, name: 'Alex Lee (Agent)' },
+      { id: 4, name: 'Emily Clark (User)' }
+    ];
+    // Demo chat history (simulate per user)
+    const chatHistory = {
+      1: [
+        { from: 'admin', text: 'Hello John, please review the new property.' },
+        { from: 'user', text: 'Sure, will do!' }
+      ],
+      2: [
+        { from: 'user', text: 'Hi, I have a question about my listing.' },
+        { from: 'admin', text: 'Of course, how can I help?' }
+      ],
+      3: [],
+      4: [
+        { from: 'admin', text: 'Welcome to the platform, Emily!' }
+      ]
+    };
+    let currentChatUserId = null;
+    const chatUserList = document.getElementById('chatUserList');
+    const chatWith = document.getElementById('chatWith');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+    const chatForm = document.getElementById('chatForm');
+    const chatSendBtn = chatForm.querySelector('button');
+
+    // Populate user list
+    function renderUserList() {
+      chatUserList.innerHTML = '';
+      chatUsers.forEach(user => {
+        const li = document.createElement('li');
+        li.innerHTML = `<a href="#" data-id="${user.id}" style="display:flex;align-items:center;gap:0.7em;padding:0.6em 1em;border-radius:8px;color:#334155;font-weight:600;text-decoration:none;transition:background 0.2s;">
+          <i class="fas fa-user"></i> ${user.name}
+        </a>`;
+        li.querySelector('a').onclick = (e) => {
+          e.preventDefault();
+          selectChatUser(user.id);
+        };
+        chatUserList.appendChild(li);
+      });
+    }
+
+    // Render chat messages for selected user
+    function renderChatMessages(userId) {
+      chatMessages.innerHTML = '';
+      (chatHistory[userId] || []).forEach(msg => {
+        const div = document.createElement('div');
+        div.style.display = 'flex';
+        div.style.justifyContent = msg.from === 'admin' ? 'flex-end' : 'flex-start';
+        div.innerHTML = `<span style="background:${msg.from === 'admin' ? 'linear-gradient(90deg,#2563eb 60%,#38bdf8 100%)' : '#e0e7ff'};color:${msg.from === 'admin' ? '#fff' : '#222'};padding:0.6em 1.1em;border-radius:16px;font-size:1em;max-width:70%;display:inline-block;">${msg.text}</span>`;
+        chatMessages.appendChild(div);
+      });
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Select a user to chat with
+    function selectChatUser(userId) {
+      currentChatUserId = userId;
+      chatWith.textContent = chatUsers.find(u => u.id === userId).name;
+      chatInput.disabled = false;
+      chatSendBtn.disabled = false;
+      renderChatMessages(userId);
+    }
+
+    // Handle sending a message
+    chatForm.onsubmit = function(e) {
+      e.preventDefault();
+      if (!currentChatUserId || !chatInput.value.trim()) return;
+      chatHistory[currentChatUserId] = chatHistory[currentChatUserId] || [];
+      chatHistory[currentChatUserId].push({ from: 'admin', text: chatInput.value });
+      renderChatMessages(currentChatUserId);
+      chatInput.value = '';
+      // Simulate real-time reply from user/agent after 1s
+      setTimeout(() => {
+        if (Math.random() > 0.5) {
+          chatHistory[currentChatUserId].push({ from: 'user', text: 'Thanks for your message!' });
+          renderChatMessages(currentChatUserId);
+        }
+      }, 1000);
+    };
+
+    // Initial render
+    renderUserList();
+    showSection('properties');
+
+    // Settings form demo
+    document.getElementById('settingsForm').onsubmit = function(e) {
+      e.preventDefault();
+      alert('Settings saved! (Demo only)');
+    };
   </script>
 </body>
 </html>

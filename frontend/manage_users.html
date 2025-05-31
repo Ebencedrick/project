@@ -5,67 +5,302 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Manage Users</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { margin: 0; background: linear-gradient(135deg, #e0e7ff 0%, #f0fdfa 100%); font-family: 'Segoe UI', Arial, sans-serif; min-height: 100vh; }
+    .admin-topbar { width: 100%; background: linear-gradient(90deg, #2563eb 60%, #38bdf8 100%); color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 1.1em 2em; box-shadow: 0 2px 12px rgba(37,99,235,0.10); position: fixed; top: 0; left: 0; z-index: 1000; }
+    .admin-topbar .logo { font-size: 1.5em; font-weight: 800; letter-spacing: 1px; }
+    .admin-topbar .topbar-right { display: flex; align-items: center; gap: 1.5em; }
+    .admin-topbar .user { font-weight: 600; font-size: 1em; display: flex; align-items: center; gap: 0.5em; }
+    .admin-topbar .logout { color: #fff; background: #dc3545; border: none; border-radius: 6px; padding: 0.5em 1.1em; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .admin-topbar .logout:hover { background: #b91c1c; }
+    .admin-layout { display: flex; margin-top: 70px; min-height: 100vh; }
+    .admin-sidebar { width: 230px; background: linear-gradient(135deg, #f0fdfa 60%, #e0e7ff 100%); box-shadow: 2px 0 16px rgba(37,99,235,0.10); border-radius: 0 16px 16px 0; padding: 2.2em 1.2em 2em 1.2em; display: flex; flex-direction: column; gap: 2em; position: fixed; top: 70px; left: 0; bottom: 0; z-index: 900; }
+    .admin-sidebar ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.2em; }
+    .admin-sidebar a { color: #334155; font-weight: 600; border-radius: 8px; padding: 0.7em 1em; display: flex; align-items: center; gap: 0.7em; text-decoration: none; transition: background 0.2s, color 0.2s; }
+    .admin-sidebar a.active, .admin-sidebar a:hover { background: linear-gradient(90deg, #2563eb 60%, #38bdf8 100%); color: #fff; box-shadow: 0 2px 8px rgba(37,99,235,0.10); }
+    .admin-main { flex: 1; margin-left: 230px; padding: 2.5em 2em 2em 2em; background: transparent; min-height: 100vh; }
+    @media (max-width: 900px) { .admin-layout { flex-direction: column; } .admin-sidebar { position: static; width: 100%; border-radius: 0 0 16px 16px; top: 0; } .admin-main { margin-left: 0; } }
+    .section-title { font-size: 2em; font-weight: 800; color: #2563eb; margin-bottom: 1.2em; letter-spacing: 1px; }
+    .users-table { width: 100%; background: linear-gradient(90deg, #f0fdfa 60%, #e0e7ff 100%); border-radius: 14px; box-shadow: 0 2px 12px rgba(37,99,235,0.08); padding: 1.5em; margin-bottom: 2em; overflow-x: auto; }
+    .users-table table { width: 100%; border-collapse: collapse; }
+    .users-table th, .users-table td { padding: 1em 0.7em; text-align: left; border-bottom: 1px solid #c7d2fe; }
+    .users-table th { color: #2563eb; font-size: 1.05em; font-weight: 700; background: #e0e7ff; letter-spacing: 0.5px; }
+    .users-table tr:last-child td { border-bottom: none; }
+    .users-table button { margin-right: 0.5em; border: none; border-radius: 8px; padding: 0.4em 1.1em; font-weight: 600; color: #fff; cursor: pointer; box-shadow: 0 2px 8px rgba(37,99,235,0.10); transition: background 0.2s; }
+    .users-table .edit { background: linear-gradient(90deg, #22d3ee 60%, #38bdf8 100%); color: #fff; }
+    .users-table .edit:hover { background: #0ea5e9; }
+    .users-table .delete { background: linear-gradient(90deg, #f43f5e 60%, #fbbf24 100%); color: #fff; }
+    .users-table .delete:hover { background: #be123c; }
+  </style>
 </head>
 <body>
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="container">
-      <div class="logo">RealEstate</div>
-      <ul class="nav-links">
-        <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
-        <li><a href="property_list.html" class="nav-link"><i class="fas fa-building"></i> Properties</a></li>
-        <li><a href="#contact" class="nav-link"><i class="fas fa-envelope"></i> Contact</a></li>
-        <li><a href="login.html" class="nav-link"><i class="fas fa-user"></i> Login/Register</a></li>
-      </ul>
-      <div class="menu-toggle"><i class="fas fa-bars"></i></div>
+  <div class="admin-topbar">
+    <div class="logo"><i class="fas fa-building"></i> RealEstate Admin</div>
+    <div class="topbar-right">
+      <div class="user" id="adminProfileDropdown" style="position:relative;cursor:pointer; font-weight:600; font-size:1em; display:flex; align-items:center; gap:0.5em;">
+        <img id="adminProfileImg" src="https://ui-avatars.com/api/?name=Admin&background=2563eb&color=fff" alt="Profile" style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #fff;box-shadow:0 1px 4px rgba(37,99,235,0.10);margin-right:0.5em;vertical-align:middle;">
+        <span>Admin <i class="fas fa-caret-down"></i></span>
+        <input type="file" id="profileImgInput" accept="image/*" style="display:none;">
+        <div id="profileDropdownMenu" style="display:none;position:absolute;right:0;top:110%;background:#fff;border-radius:10px;box-shadow:0 2px 12px rgba(37,99,235,0.12);min-width:180px;z-index:2000;">
+          <a href="#" id="viewProfileBtn" style="display:block;padding:0.9em 1.2em;color:#2563eb;font-weight:600;text-decoration:none;border-bottom:1px solid #e0e7ff;">View Profile</a>
+          <a href="#" id="changeProfileImgBtn" style="display:block;padding:0.9em 1.2em;color:#2563eb;font-weight:600;text-decoration:none;">Change Photo</a>
+        </div>
+      </div>
+      <button class="logout" style="color:#fff; background:#dc3545; border:none; border-radius:6px; padding:0.5em 1.1em; font-weight:600; cursor:pointer; transition:background 0.2s;"><i class="fas fa-sign-out-alt"></i> Logout</button>
     </div>
-  </nav>
-  <div class="container">
-    <h2>Manage Users</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Role</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>John Doe</td>
-          <td>john@example.com</td>
-          <td>Agent</td>
-          <td>
-            <button class="btn">Edit</button>
-            <button class="btn" style="background:#dc3545;">Delete</button>
-          </td>
-        </tr>
-        <tr>
-          <td>Jane Smith</td>
-          <td>jane@example.com</td>
-          <td>Buyer</td>
-          <td>
-            <button class="btn">Edit</button>
-            <button class="btn" style="background:#dc3545;">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
   </div>
+  <div class="admin-layout">
+    <nav class="admin-sidebar">
+      <ul>
+        <li><a href="admin_dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="manage_users.html" class="active"><i class="fas fa-users"></i> Manage Users</a></li>
+        <li><a href="manage_properties.html"><i class="fas fa-home"></i> Manage Properties</a></li>
+      </ul>
+    </nav>
+    <main class="admin-main">
+      <h2 class="section-title">Manage Users</h2>
+      <div class="users-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>John Doe</td>
+              <td>john@example.com</td>
+              <td>Agent</td>
+              <td>
+                <button class="edit"><i class="fas fa-edit"></i> Edit</button>
+                <button class="delete"><i class="fas fa-trash"></i> Delete</button>
+              </td>
+            </tr>
+            <tr>
+              <td>Jane Smith</td>
+              <td>jane@example.com</td>
+              <td>Buyer</td>
+              <td>
+                <button class="edit"><i class="fas fa-edit"></i> Edit</button>
+                <button class="delete"><i class="fas fa-trash"></i> Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- Edit User Modal -->
+  <div id="editUserModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.25);z-index:2000;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:14px;box-shadow:0 2px 16px rgba(37,99,235,0.13);padding:2em 2.5em;min-width:320px;max-width:90vw;position:relative;">
+      <button id="closeEditUserModal" style="position:absolute;top:1em;right:1em;background:none;border:none;font-size:1.3em;color:#2563eb;cursor:pointer;"><i class="fas fa-times"></i></button>
+      <h3 style="color:#2563eb;font-weight:800;margin-bottom:1em;">Edit User</h3>
+      <form id="editUserForm">
+        <div style="margin-bottom:1em;">
+          <label for="editUsername" style="font-weight:600;color:#2563eb;">Username</label><br>
+          <input type="text" id="editUsername" name="editUsername" required style="width:100%;padding:0.5em 0.8em;border-radius:7px;border:1px solid #a5b4fc;font-size:1em;">
+        </div>
+        <div style="margin-bottom:1em;">
+          <label for="editEmail" style="font-weight:600;color:#2563eb;">Email</label><br>
+          <input type="email" id="editEmail" name="editEmail" required style="width:100%;padding:0.5em 0.8em;border-radius:7px;border:1px solid #a5b4fc;font-size:1em;">
+        </div>
+        <div style="margin-bottom:1em;">
+          <label for="editRole" style="font-weight:600;color:#2563eb;">Role</label><br>
+          <select id="editRole" name="editRole" required style="width:100%;padding:0.5em 0.8em;border-radius:7px;border:1px solid #a5b4fc;font-size:1em;">
+            <option value="admin">Admin</option>
+            <option value="agent">Agent</option>
+            <option value="user">User</option>
+          </select>
+        </div>
+        <button type="submit" style="background:linear-gradient(90deg,#2563eb 60%,#38bdf8 100%);color:#fff;border:none;border-radius:8px;padding:0.7em 2em;font-weight:700;font-size:1.1em;box-shadow:0 2px 8px rgba(37,99,235,0.10);transition:background 0.2s;">Save Changes</button>
+      </form>
+    </div>
+  </div>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const navLinks = document.querySelectorAll('.nav-link');
-      const current = window.location.pathname.split('/').pop();
-      navLinks.forEach(link => {
-        const href = link.getAttribute('href');
-        if ((href === current) || (href === '#' && window.location.hash)) {
-          link.classList.add('active');
-        } else if (href !== '#' && current === '' && href === 'index.html') {
-          link.classList.add('active');
+    // --- Admin Profile Dropdown & Image Upload ---
+    const adminProfileDropdown = document.getElementById('adminProfileDropdown');
+    const profileDropdownMenu = document.getElementById('profileDropdownMenu');
+    const profileImgInput = document.getElementById('profileImgInput');
+    const adminProfileImg = document.getElementById('adminProfileImg');
+    const changeProfileImgBtn = document.getElementById('changeProfileImgBtn');
+    const viewProfileBtn = document.getElementById('viewProfileBtn');
+
+    // Toggle dropdown
+    adminProfileDropdown.addEventListener('click', function(e) {
+      if (e.target === changeProfileImgBtn) return; // handled below
+      profileDropdownMenu.style.display = profileDropdownMenu.style.display === 'block' ? 'none' : 'block';
+    });
+    document.addEventListener('click', function(e) {
+      if (!adminProfileDropdown.contains(e.target)) profileDropdownMenu.style.display = 'none';
+    });
+
+    // Change profile image
+    changeProfileImgBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      profileImgInput.click();
+    });
+    profileImgInput.addEventListener('change', function() {
+      if (profileImgInput.files && profileImgInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          adminProfileImg.src = e.target.result;
+        };
+        reader.readAsDataURL(profileImgInput.files[0]);
+      }
+    });
+
+    // --- Admin Profile Modal ---
+    // Modal HTML
+    const profileModal = document.createElement('div');
+    profileModal.id = 'profileModal';
+    profileModal.style.display = 'none';
+    profileModal.style.position = 'fixed';
+    profileModal.style.top = '0';
+    profileModal.style.left = '0';
+    profileModal.style.width = '100vw';
+    profileModal.style.height = '100vh';
+    profileModal.style.background = 'rgba(30, 41, 59, 0.18)';
+    profileModal.style.zIndex = '3000';
+    profileModal.innerHTML = `
+      <div style="background:#fff;border-radius:16px;box-shadow:0 4px 32px rgba(37,99,235,0.13);max-width:370px;width:90vw;padding:2.2em 2em 1.5em 2em;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:1em;">
+          <img id="modalProfileImg" src="https://ui-avatars.com/api/?name=Admin&background=2563eb&color=fff" style="width:70px;height:70px;border-radius:50%;object-fit:cover;border:2px solid #2563eb;box-shadow:0 1px 4px rgba(37,99,235,0.10);">
+          <form id="profileModalForm" style="width:100%;display:flex;flex-direction:column;gap:1em;align-items:center;">
+            <div style="width:100%;">
+              <label style="font-weight:600;color:#2563eb;">Name</label>
+              <input type="text" id="modalAdminName" value="Admin" style="width:100%;padding:0.6em 1em;border-radius:8px;border:1px solid #a5b4fc;font-size:1em;" disabled>
+            </div>
+            <div style="width:100%;">
+              <label style="font-weight:600;color:#2563eb;">Email</label>
+              <input type="email" id="modalAdminEmail" value="admin@example.com" style="width:100%;padding:0.6em 1em;border-radius:8px;border:1px solid #a5b4fc;font-size:1em;" disabled>
+            </div>
+            <div style="width:100%;">
+              <label style="font-weight:600;color:#2563eb;">Password</label>
+              <input type="password" id="modalAdminPassword" value="" placeholder="Change password" style="width:100%;padding:0.6em 1em;border-radius:8px;border:1px solid #a5b4fc;font-size:1em;" disabled>
+            </div>
+            <div style="display:flex;gap:1em;justify-content:center;width:100%;margin-top:0.5em;">
+              <button type="button" id="editProfileBtn" style="background:linear-gradient(90deg,#2563eb 60%,#38bdf8 100%);color:#fff;border:none;border-radius:8px;padding:0.7em 1.5em;font-weight:700;font-size:1em;">Edit</button>
+              <button type="submit" id="saveProfileBtn" style="background:linear-gradient(90deg,#6EE7B7 60%,#2563eb 100%);color:#fff;border:none;border-radius:8px;padding:0.7em 1.5em;font-weight:700;font-size:1em;display:none;">Save</button>
+              <button type="button" id="closeProfileBtn" style="background:#e0e7ff;color:#2563eb;border:none;border-radius:8px;padding:0.7em 1.5em;font-weight:700;font-size:1em;">Close</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(profileModal);
+
+    // Open modal
+    viewProfileBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      // Sync modal fields with current values
+      document.getElementById('modalProfileImg').src = adminProfileImg.src;
+      document.getElementById('modalAdminName').value = document.getElementById('adminName') ? document.getElementById('adminName').value : 'Admin';
+      document.getElementById('modalAdminEmail').value = document.getElementById('adminEmail') ? document.getElementById('adminEmail').value : 'admin@example.com';
+      document.getElementById('modalAdminPassword').value = '';
+      document.getElementById('modalAdminName').disabled = true;
+      document.getElementById('modalAdminEmail').disabled = true;
+      document.getElementById('modalAdminPassword').disabled = true;
+      document.getElementById('editProfileBtn').style.display = '';
+      document.getElementById('saveProfileBtn').style.display = 'none';
+      profileModal.style.display = 'block';
+      profileDropdownMenu.style.display = 'none';
+    });
+    // Edit button
+    profileModal.addEventListener('click', function(e) {
+      if (e.target.id === 'editProfileBtn') {
+        document.getElementById('modalAdminName').disabled = false;
+        document.getElementById('modalAdminEmail').disabled = false;
+        document.getElementById('modalAdminPassword').disabled = false;
+        document.getElementById('editProfileBtn').style.display = 'none';
+        document.getElementById('saveProfileBtn').style.display = '';
+      }
+    });
+    // Save button
+    document.getElementById('profileModalForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Save changes to main form (demo only)
+      if(document.getElementById('adminName')) document.getElementById('adminName').value = document.getElementById('modalAdminName').value;
+      if(document.getElementById('adminEmail')) document.getElementById('adminEmail').value = document.getElementById('modalAdminEmail').value;
+      profileModal.style.display = 'none';
+      alert('Profile updated! (Demo only)');
+    });
+    // Close button
+    profileModal.addEventListener('click', function(e) {
+      if (e.target.id === 'closeProfileBtn') {
+        profileModal.style.display = 'none';
+      }
+    });
+
+    // Sidebar tab switching logic (interconnect pages)
+    const messagesTab = document.getElementById('messagesTab');
+    const settingsTab = document.getElementById('settingsTab');
+    const sidebarLinks = document.querySelectorAll('.admin-sidebar a');
+    const logoutBtn = document.querySelector('.logout');
+    if(messagesTab) messagesTab.addEventListener('click', e => { e.preventDefault(); window.location.href = 'manage_properties.html#messages'; });
+    if(settingsTab) settingsTab.addEventListener('click', e => { e.preventDefault(); window.location.href = 'manage_properties.html#settings'; });
+    // Dashboard/Properties links
+    sidebarLinks.forEach(link => {
+      if(link.getAttribute('href') === 'manage_properties.html') {
+        link.addEventListener('click', e => { e.preventDefault(); window.location.href = 'manage_properties.html'; });
+      }
+      if(link.getAttribute('href') === 'admin_dashboard.html') {
+        link.addEventListener('click', e => { e.preventDefault(); window.location.href = 'admin_dashboard.html'; });
+      }
+    });
+    // Logout button logic
+    if(logoutBtn) logoutBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      // Simulate logout: redirect to login page (or home)
+      window.location.href = 'login.html';
+    });
+
+    // Edit and Delete button logic
+    const editBtns = document.querySelectorAll('.users-table .edit');
+    const deleteBtns = document.querySelectorAll('.users-table .delete');
+    const editUserModal = document.getElementById('editUserModal');
+    const closeEditUserModal = document.getElementById('closeEditUserModal');
+    const editUserForm = document.getElementById('editUserForm');
+    let currentRow = null;
+
+    editBtns.forEach(btn => {
+      btn.onclick = function() {
+        currentRow = btn.closest('tr');
+        const tds = currentRow.querySelectorAll('td');
+        document.getElementById('editUsername').value = tds[0].textContent.trim();
+        document.getElementById('editEmail').value = tds[1].textContent.trim();
+        document.getElementById('editRole').value = tds[2].textContent.trim().toLowerCase();
+        editUserModal.style.display = 'flex';
+      };
+    });
+    closeEditUserModal.onclick = () => editUserModal.style.display = 'none';
+    window.onclick = function(event) {
+      if (event.target === editUserModal) editUserModal.style.display = 'none';
+    };
+    editUserForm.onsubmit = function(e) {
+      e.preventDefault();
+      if (currentRow) {
+        const tds = currentRow.querySelectorAll('td');
+        tds[0].textContent = document.getElementById('editUsername').value;
+        tds[1].textContent = document.getElementById('editEmail').value;
+        tds[2].textContent = document.getElementById('editRole').value.charAt(0).toUpperCase() + document.getElementById('editRole').value.slice(1);
+      }
+      editUserModal.style.display = 'none';
+      this.reset();
+      alert('User updated! (Demo only)');
+    };
+    deleteBtns.forEach(btn => {
+      btn.onclick = function() {
+        if (confirm('Are you sure you want to delete this user? (Demo only)')) {
+          btn.closest('tr').remove();
         }
-      });
+      };
     });
   </script>
 </body>
