@@ -1,0 +1,277 @@
+/* Pure CSS for Real Estate E-Commerce Website */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+html, body {
+  height: 100%;
+  font-family: 'Poppins', sans-serif;
+  background: #F4F4F4;
+  color: #333;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.navbar {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1em 0;
+}
+.logo {
+  font-size: 1.5em;
+  font-weight: 700;
+  color: #1E90FF;
+}
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.5em;
+}
+.nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a.active, .nav-links a:hover {
+  color: #1E90FF;
+}
+.menu-toggle {
+  display: none;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+.hero {
+  background: linear-gradient(rgba(30,144,255,0.7),rgba(30,144,255,0.7)), url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+  color: #fff;
+  padding: 4em 0 2em 0;
+  text-align: center;
+}
+.hero h1 {
+  font-size: 2.5em;
+  margin-bottom: 1em;
+}
+.filter-box {
+  display: flex;
+  gap: 1em;
+  justify-content: center;
+  flex-wrap: wrap;
+  background: rgba(255,255,255,0.9);
+  padding: 1em;
+  border-radius: 8px;
+}
+.filter-box select, .filter-box input {
+  padding: 0.5em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1em;
+}
+.btn {
+  background: #1E90FF;
+  color: #fff;
+  border: none;
+  padding: 0.6em 1.2em;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn:hover {
+  background: #FF8C00;
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2em 1em;
+}
+.property-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2em;
+  margin-top: 2em;
+}
+.card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding: 1.2em;
+  margin-bottom: 1.5em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 1em;
+}
+
+/* Property detail layout */
+.property-detail {
+  display: flex;
+  gap: 2em;
+  margin: 3em 0;
+  align-items: flex-start;
+}
+.property-detail .image-gallery {
+  flex: 1 1 350px;
+  max-width: 400px;
+  position: sticky;
+  top: 100px;
+  align-self: flex-start;
+}
+.property-detail .image-gallery img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.property-detail .details {
+  flex: 2 1 0;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding: 2em;
+}
+
+@media (max-width: 992px) {
+  .property-detail {
+    flex-direction: column;
+  }
+  .property-detail .image-gallery {
+    position: static;
+    max-width: 100%;
+    margin-bottom: 2em;
+  }
+}
+.footer {
+  background: #fff;
+  text-align: center;
+  padding: 1.5em 0 1em 0;
+  margin-top: 2em;
+  color: #888;
+  font-size: 1em;
+}
+
+/* Sidebar for dashboard/admin */
+.dashboard {
+  display: flex;
+  gap: 2em;
+}
+.sidebar {
+  min-width: 220px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding: 2em 1em;
+  height: fit-content;
+}
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+.sidebar li {
+  margin-bottom: 1.2em;
+}
+.sidebar a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  padding: 0.5em 1em;
+  border-radius: 4px;
+  transition: background 0.2s, color 0.2s;
+}
+.sidebar a.active, .sidebar a:hover {
+  background: #1E90FF;
+  color: #fff;
+}
+
+/* Dashboard main content */
+.dashboard-main {
+  flex: 1;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding: 2em;
+}
+
+/* Table styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5em;
+}
+th, td {
+  padding: 0.8em 1em;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+th {
+  background: #F4F4F4;
+  font-weight: 600;
+}
+tr:last-child td {
+  border-bottom: none;
+}
+
+/* Auth forms */
+.auth-form {
+  max-width: 400px;
+  margin: 3em auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+.auth-form input, .auth-form select {
+  padding: 0.7em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1em;
+}
+.auth-form button {
+  margin-top: 1em;
+}
+.auth-form p {
+  text-align: center;
+  margin-top: 1em;
+}
+
+/* Responsive sidebar/dashboard */
+@media (max-width: 992px) {
+  .dashboard { flex-direction: column; }
+  .sidebar { min-width: 100%; margin-bottom: 1.5em; }
+}
+@media (max-width: 768px) {
+  .dashboard-main { padding: 1em; }
+  .sidebar { padding: 1em 0.5em; }
+}
+@media (max-width: 992px) {
+  .container { max-width: 95%; }
+  .property-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .navbar .container { flex-direction: column; align-items: flex-start; }
+  .nav-links { flex-direction: column; gap: 0.5em; width: 100%; }
+  .menu-toggle { display: block; }
+  .property-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 576px) {
+  .container { padding: 0.5em 0.2em; }
+  .hero h1 { font-size: 1.5em; }
+}

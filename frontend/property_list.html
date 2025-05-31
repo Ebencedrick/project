@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Property Listings</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="logo">RealEstate</div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="property_list.html" class="active">Properties</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="login.html">Login/Register</a></li>
+      </ul>
+      <div class="menu-toggle"><i class="fas fa-bars"></i></div>
+    </div>
+  </nav>
+  <div class="container">
+    <aside class="sidebar">
+      <h3>Filter</h3>
+      <form id="filter-form">
+        <label>Type</label>
+        <select name="type">
+          <option value="">All</option>
+          <option value="apartment">Apartment</option>
+          <option value="house">House</option>
+        </select>
+        <label>Location</label>
+        <select name="location">
+          <option value="">All</option>
+          <option value="city1">City 1</option>
+          <option value="city2">City 2</option>
+        </select>
+        <label>Price Range</label>
+        <input type="number" name="min_price" placeholder="Min">
+        <input type="number" name="max_price" placeholder="Max">
+        <button class="btn" type="submit">Apply</button>
+      </form>
+    </aside>
+    <main class="property-list">
+      <div class="property-grid">
+        <div class="card">
+          <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Property">
+          <h3>Modern Apartment</h3>
+          <p>City 1</p>
+          <p><b>$250,000</b></p>
+          <a href="property_detail.html?id=1" class="btn">View Details</a>
+        </div>
+        <div class="card">
+          <img src="https://images.unsplash.com/photo-1460518451285-97b6aa326961?auto=format&fit=crop&w=400&q=80" alt="Property">
+          <h3>Luxury Villa</h3>
+          <p>City 2</p>
+          <p><b>$750,000</b></p>
+          <a href="property_detail.html?id=2" class="btn">View Details</a>
+        </div>
+        <div class="card">
+          <img src="https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=400&q=80" alt="Property">
+          <h3>Cozy House</h3>
+          <p>City 1</p>
+          <p><b>$320,000</b></p>
+          <a href="property_detail.html?id=3" class="btn">View Details</a>
+        </div>
+        <div class="card">
+          <img src="https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=400&q=80" alt="Upcoming Project">
+          <h3>Skyline Towers (Upcoming)</h3>
+          <p>City 2</p>
+          <p>From $400,000</p>
+          <a href="property_detail.html?id=4" class="btn">Learn More</a>
+        </div>
+        <div class="card">
+          <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="Upcoming Project">
+          <h3>Green Valley Homes (Upcoming)</h3>
+          <p>City 1</p>
+          <p>From $350,000</p>
+          <a href="property_detail.html?id=5" class="btn">Learn More</a>
+        </div>
+        <div class="card">
+          <img src="https://images.unsplash.com/photo-1519974719765-e6559eac2575?auto=format&fit=crop&w=400&q=80" alt="Property">
+          <h3>Downtown Loft</h3>
+          <p>City 2</p>
+          <p><b>$420,000</b></p>
+          <a href="property_detail.html?id=6" class="btn">View Details</a>
+        </div>
+      </div>
+      <div class="pagination">
+        <!-- Pagination controls -->
+      </div>
+    </main>
+  </div>
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 RealEstate. All rights reserved.</p>
+    </div>
+  </footer>
+  <script src="main.js"></script>
+</body>
+</html>

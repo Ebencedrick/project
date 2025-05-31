@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real Estate E-Commerce</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="logo">RealEstate</div>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="property_list.html">Properties</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="login.html">Login/Register</a></li>
+      </ul>
+      <div class="menu-toggle"><i class="fas fa-bars"></i></div>
+    </div>
+  </nav>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1>Find Your Dream Home</h1>
+      <p style="font-size:1.2em; margin-bottom:2em;">Browse the best properties, top houses, and upcoming projects in your city.</p>
+      <form class="filter-box">
+        <select name="type">
+          <option value="">Property Type</option>
+          <option value="apartment">Apartment</option>
+          <option value="house">House</option>
+        </select>
+        <select name="location">
+          <option value="">Location</option>
+          <option value="city1">City 1</option>
+          <option value="city2">City 2</option>
+        </select>
+        <input type="number" name="min_price" placeholder="Min Price">
+        <input type="number" name="max_price" placeholder="Max Price">
+        <button class="btn" type="submit">Search</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Top Houses Section -->
+  <section class="container" style="margin-top:3em;">
+    <h2 style="margin-bottom:1em;">Top Houses</h2>
+    <div class="property-grid">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Property">
+        <h3>Modern Apartment</h3>
+        <p>City 1</p>
+        <p><b>$250,000</b></p>
+        <a href="property_detail.html?id=1" class="btn">View Details</a>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1460518451285-97b6aa326961?auto=format&fit=crop&w=400&q=80" alt="Property">
+        <h3>Luxury Villa</h3>
+        <p>City 2</p>
+        <p><b>$750,000</b></p>
+        <a href="property_detail.html?id=2" class="btn">View Details</a>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=400&q=80" alt="Property">
+        <h3>Cozy House</h3>
+        <p>City 1</p>
+        <p><b>$320,000</b></p>
+        <a href="property_detail.html?id=3" class="btn">View Details</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Upcoming Projects Section -->
+  <section class="container" style="margin-top:3em;">
+    <h2 style="margin-bottom:1em;">Upcoming Projects</h2>
+    <div class="property-grid">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=400&q=80" alt="Upcoming Project">
+        <h3>Skyline Towers</h3>
+        <p>City 2</p>
+        <p>Completion: Q4 2025</p>
+        <a href="#" class="btn">Learn More</a>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="Upcoming Project">
+        <h3>Green Valley Homes</h3>
+        <p>City 1</p>
+        <p>Completion: Q2 2026</p>
+        <a href="#" class="btn">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews Section -->
+  <section class="container" style="margin-top:3em;">
+    <h2 style="margin-bottom:1em;">What Our Clients Say</h2>
+    <div class="property-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
+      <div class="card" style="align-items:flex-start;">
+        <p style="font-size:1.1em;">"The process was smooth and the team was very helpful. I found my dream home in just a week!"</p>
+        <div style="margin-top:1em; font-weight:600;">- Sarah K.</div>
+      </div>
+      <div class="card" style="align-items:flex-start;">
+        <p style="font-size:1.1em;">"Great selection of properties and excellent customer service. Highly recommended!"</p>
+        <div style="margin-top:1em; font-weight:600;">- Michael B.</div>
+      </div>
+      <div class="card" style="align-items:flex-start;">
+        <p style="font-size:1.1em;">"I was able to sell my house quickly and at a good price. Thank you!"</p>
+        <div style="margin-top:1em; font-weight:600;">- Linda W.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="container" style="margin-top:3em; margin-bottom:3em;">
+    <h2 style="margin-bottom:1em;">Contact Us</h2>
+    <div style="display:flex; flex-wrap:wrap; gap:2em; align-items:flex-start;">
+      <div style="flex:1; min-width:260px;">
+        <h4>Get in Touch</h4>
+        <form class="auth-form" style="box-shadow:none; max-width:100%;">
+          <input type="text" name="name" placeholder="Your Name" required>
+          <input type="email" name="email" placeholder="Your Email" required>
+          <textarea name="message" placeholder="Your Message" required style="min-height:100px;"></textarea>
+          <button class="btn" type="submit">Send Message</button>
+        </form>
+      </div>
+      <div style="flex:1; min-width:260px;">
+        <h4>Contact Information</h4>
+        <p>Email: info@realestate.com</p>
+        <p>Phone: +123 456 7890</p>
+        <p>123 Main Street, City 1</p>
+        <h4 style="margin-top:2em;">Follow Us</h4>
+        <p>
+          <a href="#" style="color:#1E90FF; margin-right:1em;"><i class="fab fa-facebook fa-lg"></i></a>
+          <a href="#" style="color:#1E90FF; margin-right:1em;"><i class="fab fa-twitter fa-lg"></i></a>
+          <a href="#" style="color:#1E90FF;"><i class="fab fa-instagram fa-lg"></i></a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container" style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:2em; align-items:flex-start;">
+      <div style="flex:1; min-width:200px;">
+        <h3 style="color:#1E90FF;">RealEstate</h3>
+        <p>Your trusted partner for buying, selling, and renting properties.</p>
+      </div>
+      <div style="flex:1; min-width:200px;">
+        <h4>Quick Links</h4>
+        <ul style="list-style:none; padding:0;">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="property_list.html">Properties</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="login.html">Login/Register</a></li>
+        </ul>
+      </div>
+      <div style="flex:1; min-width:200px;">
+        <h4>Contact Us</h4>
+        <p>Email: info@realestate.com</p>
+        <p>Phone: +123 456 7890</p>
+        <p>123 Main Street, City 1</p>
+      </div>
+    </div>
+    <div style="text-align:center; color:#888; margin-top:2em;">&copy; 2025 RealEstate. All rights reserved.</div>
+  </footer>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 RealEstate. All rights reserved.</p>
+    </div>
+  </footer>
+  <script src="main.js"></script>
+</body>
+</html>

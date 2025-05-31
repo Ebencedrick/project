@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <div class="logo">RealEstate</div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="property_list.html">Properties</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="login.html">Logout</a></li>
+      </ul>
+      <div class="menu-toggle"><i class="fas fa-bars"></i></div>
+    </div>
+  </nav>
+  <div class="container dashboard">
+    <aside class="sidebar">
+      <ul>
+        <li><a href="#" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="manage_users.html"><i class="fas fa-users"></i> Manage Users</a></li>
+        <li><a href="manage_properties.html"><i class="fas fa-home"></i> Manage Properties</a></li>
+        <li><a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+      </ul>
+    </aside>
+    <main class="dashboard-main">
+      <h2>Admin Dashboard</h2>
+      <div style="display:flex; gap:2em; margin-bottom:2em;">
+        <div class="card">Users: <span id="user-count">12</span></div>
+        <div class="card">Properties: <span id="property-count">8</span></div>
+        <div class="card">Pending: <span id="pending-count">2</span></div>
+      </div>
+      <h3>Recent Activity</h3>
+      <ul class="activity-log">
+        <li>User John Doe registered as Agent</li>
+        <li>Property "Modern Apartment" submitted for approval</li>
+        <li>Property "Cozy House" approved</li>
+      </ul>
+    </main>
+  </div>
+</body>
+</html>
